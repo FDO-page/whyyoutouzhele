@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>镜像推特(𝕏)-李老师不是你老是</title>
+    <style>
+        :root {
+            --background-color: #000000;
+            --text-color: #ffffff;
+            --border-color: #2f3336;
+            --secondary-color: #6e767d;
+        }
+
+        @media (prefers-color-scheme: light) {
+            :root {
+                --background-color: #ffffff;
+                --text-color: #0f1419;
+                --border-color: #eff3f4;
+                --secondary-color: #536471;
+            }
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+        }
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #ffffff;
+            color: #000;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        .header {
+            background-image: url("https://s2.loli.net/2024/08/20/P1Fn4OyksGBfKId.jpg");
+            background-size: cover;
+            height: 200px;
+            position: relative;
+        }
+        .profile-pic {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            border: 4px solid #ffffff;
+            position: absolute;
+            bottom: -60px;
+            left: 15px;
+            background-color: #666;
+            background-image: url("https://s2.loli.net/2024/08/20/eWmXrR9IMHBpECU.jpg");
+            background-size: cover;
+        }
+        .user-info {
+            margin-top: 70px;
+            margin-bottom: 20px;
+        }
+        .user-name {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .user-handle {
+            font-size: 15px;
+            color: #777;
+        }
+        .tweet {
+            border-bottom: 1px solid #333;
+            padding: 15px 0;
+            display: flex;
+        }
+        .tweet-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+            background-color: #666;
+            background-image: url("https://s2.loli.net/2024/08/20/eWmXrR9IMHBpECU.jpg");
+            background-size: cover;
+            flex-shrink: 0;
+        }
+        .tweet-content-wrapper {
+            flex-grow: 1;
+        }
+        .tweet-user-info {
+            display: flex;
+            align-items: baseline;
+            margin-bottom: 5px;
+        }
+        .tweet-user-name {
+            font-weight: bold;
+            margin-right: 5px;
+        }
+        .tweet-user-handle {
+            color: #777;
+            font-size: 14px;
+        }
+        .tweet-content {
+            margin-bottom: 10px;
+        }
+        .tweet-images {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2px;
+            margin-bottom: 10px;
+        }
+        .tweet-images img {
+            border-radius: 15px;
+            cursor: pointer;
+            object-fit: cover;
+        }
+        .tweet-images.one-image img {
+            width: 100%;
+            max-height: 300px;
+        }
+        .tweet-images.two-images img {
+            width: calc(50% - 1px);
+            height: 150px;
+        }
+        .tweet-images.three-images img, .tweet-images.four-images img {
+            height: 100px;
+        }
+        .tweet-images.three-images img:first-child, .tweet-images.four-images img:first-child {
+            width: calc(100% - 2px);
+            height: 200px;
+        }
+        .tweet-images.three-images img:not(:first-child), .tweet-images.four-images img:not(:first-child) {
+            width: calc(50% - 1px);
+        }
+        .tweet-meta {
+            font-size: 14px;
+            color: #777;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(128, 128, 128, 0.9);
+        }
+        .modal-content {
+            margin: auto;
+            display: block;
+            width: 80%;
+            max-width: 700px;
+        }
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .close:hover,
+        .close:focus {
+            color: #fff;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 10px;
+            }
+            .header {
+                height: 150px;
+            }
+            .profile-pic {
+                width: 80px;
+                height: 80px;
+                bottom: -40px;
+            }
+            .user-info {
+                margin-top: 50px;
+            }
+            .tweet-images.two-images img,
+            .tweet-images.three-images img:not(:first-child),
+            .tweet-images.four-images img:not(:first-child) {
+                height: 100px;
+            }
+            .tweet-images.three-images img:first-child,
+            .tweet-images.four-images img:first-child {
+                height: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="profile-pic"></div>
+        </div>
+        <div class="user-info">
+            <div class="user-name">李老师不是你老是</div>
+            <div class="user-handle">@whyyoutouzhele</div>
+        </div>
+        <div class="tweet">
+            <div class="tweet-avatar"></div>
+            <div class="tweet-content-wrapper">
+                <div class="tweet-user-info">
+                    <span class="tweet-user-name">李老师不是你老是</span>
+                    <span class="tweet-user-handle">@whyyoutouzhele</span>
+                </div>
+                <div class="tweet-content">你看那通天的巨塔，每时每刻都有人往下跳。我小时候不懂，以为那是雪花。</div>
+                <div class="tweet-meta">
+                    <span class="tweet-time" data-timestamp="2022-04-17T03:32:00Z">8月20日</span>
+                </div>
+            </div>
+        </div>
+        <div class="tweet">
+            <div class="tweet-avatar"></div>
+            <div class="tweet-content-wrapper">
+                <div class="tweet-user-info">
+                    <span class="tweet-user-name">李老师不是你老是</span>
+                    <span class="tweet-user-handle">@whyyoutouzhele</span>
+                </div>
+                <div class="tweet-content">上交所，深交所发布公告表示
+自8月19日起，“北向资金”数据不再按日实时披露，而是将改为按季度公布。
+有人士认为，北向资金对A股影响巨大，不再实时披露有利于稳定投资者信心。</div>
+                <div class="tweet-images two-images">
+                    <img src="https://s2.loli.net/2024/08/20/fX9DdVKhkFM2Z3N.jpg" alt="图片1">
+                    <img src="https://s2.loli.net/2024/08/20/vLm2znaoiI94fs7.jpg" alt="图片2">
+                </div>
+                <div class="tweet-meta">
+                    <span class="tweet-time" data-timestamp="2024-08-20T01:00:00Z">8月20日</span>
+                </div>
+            </div>
+        </div>
+        <div class="tweet">
+            <div class="tweet-avatar"></div>
+            <div class="tweet-content-wrapper">
+                <div class="tweet-user-info">
+                    <span class="tweet-user-name">李老师不是你老是</span>
+                    <span class="tweet-user-handle">@whyyoutouzhele</span>
+                </div>
+                <div class="tweet-content">近日，哈尔滨。一男子发视频表示，自己在光大银行刚存完6000元钱想要转给老人拿去治病，却被银行告知系统除了问题，钱三天后才能到自己卡上。</div>
+                <div class="tweet-images one-image">
+                    <img src="https://s2.loli.net/2024/08/20/6JzGImBC31LX7DE.jpg" alt="图片1">
+                </div>
+                <div class="tweet-meta">
+                    <span class="tweet-time" data-timestamp="2024-08-19T15:30:00Z"></span>
+                </div>
+            </div>
+        </div>
+        <div class="tweet">
+            <div class="tweet-avatar"></div>
+            <div class="tweet-content-wrapper">
+                <div class="tweet-user-info">
+                    <span class="tweet-user-name">李老师不是你老是</span>
+                    <span class="tweet-user-handle">@whyyoutouzhele</span>
+                </div>
+                <div class="tweet-content">网友投稿
+四川省广安市为了迎合考核，避免出现返贫的措施就是搞摊派，所有的部门工作人员按照级别每月强制购买贫困户手中的高价农副产品，美其名曰消费帮扶。
+然而贫困户家里面根本没有多少农副产品，就只能去市场收购然后再转手卖给公务员。
+考核要求是脱贫后不能返贫，没有增收措施就只有强制摊派了。
+这种考核要求不是单个地方的，而是大面积甚至是全国的硬性指标。仅仅是为了突出习近平的光辉政绩的政治任务。</div>
+                <div class="tweet-images one-image">
+                    <img src="https://s2.loli.net/2024/08/20/PrVIBfS6EzZ8KgN.jpg" alt="图片1">
+                </div>
+                <div class="tweet-meta">
+                    <span class="tweet-time" data-timestamp="2024-01-19T15:30:00Z"></span>
+                </div>
+            </div>
+        </div>
+        <div class="tweet">
+            <div class="tweet-avatar"></div>
+            <div class="tweet-content-wrapper">
+                <div class="tweet-user-info">
+                    <span class="tweet-user-name">李老师不是你老是</span>
+                    <span class="tweet-user-handle">@whyyoutouzhele</span>
+                </div>
+                <div class="tweet-content">8月19日，一则“新西兰总理带路人参观办公室”的视频，引发网友讨论，网友回复“我连镇长公母都不知道、我连乡长都不知道是谁、居委会主任我都见不到”</div>
+                <div class="tweet-images three-images">
+                    <img src="https://s2.loli.net/2024/08/20/RoFAkbWNLBCMcEi.jpg" alt="图片1">
+                    <img src="https://s2.loli.net/2024/08/20/AxsYwO4fMRcqgpd.jpg" alt="图片2">
+<img src="https://s2.loli.net/2024/08/20/cugEMPrqDC4O9m1.jpg" alt="图片3">
+                </div>
+                <div class="tweet-meta">
+                    <span class="tweet-time" data-timestamp="2024-08-20T01:00:00Z">8月20日</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="imageModal" class="modal">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="modalImage">
+    </div>
+
+    <script>
+        // 更新发布时间
+        function updateTweetTimes() {
+            const tweetTimes = document.querySelectorAll('.tweet-time');
+            const now = new Date();
+
+            tweetTimes.forEach(tweetTime => {
+                const timestamp = new Date(tweetTime.getAttribute('data-timestamp'));
+                const diff = now - timestamp;
+                const minutes = Math.floor(diff / 60000);
+                const hours = Math.floor(minutes / 60);
+                const days = Math.floor(hours / 24);
+                const years = Math.floor(days / 365);
+
+                let timeString;
+                if (years > 0) {
+                    timeString = `${years}年前`;
+                } else if (days > 0) {
+                    timeString = `${days}天前`;
+                } else if (hours > 0) {
+                    timeString = `${hours}小时前`;
+                } else if (minutes > 0) {
+                    timeString = `${minutes}分钟前`;
+                } else {
+                    timeString = '刚刚';
+                }
+
+                tweetTime.textContent = timeString;
+            });
+        }
+
+        // 初始更新时间并每分钟更新一次
+        updateTweetTimes();
+        setInterval(updateTweetTimes, 60000);
+
+        // 图片点击放大
+        const modal = document.getElementById('imageModal');
+        const modalImg = document.getElementById('modalImage');
+        const closeBtn = document.getElementsByClassName('close')[0];
+
+        document.querySelectorAll('.tweet-images img').forEach(img => {
+            img.onclick = function() {
+                modal.style.display = "block";
+                modalImg.src = this.src;
+            }
+        });
+
+        closeBtn.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html>
